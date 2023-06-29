@@ -71,9 +71,22 @@ const putUsuarioCliente = async ( req = request, res = response ) => {
     });
 }
 
+const deleteUsuarioCliente = async (req = request, res = response) => {
+    const { id } = req.params;
+
+    const usuarioEliminado = await Usuario.findByIdAndDelete(id);
+
+    res.json({
+        msg: 'Usuario eliminado existosamente',
+        usuarioEliminado
+    })
+
+}
+
 module.exports = {
     defaultAdmin,
     getUsuarios,
     postUsuarioCliente,
     putUsuarioCliente, 
+    deleteUsuarioCliente
 }
