@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const Cuenta = require('../models/cuenta');
 const Usuario = require('../models/usuario');
 
-const mostrarCuentas = async (req = request, res = response) => {
+const getCuentas = async (req = request, res = response) => {
     try {
         // Buscar todas las cuentas con estado activo
         const listaCuentas = await Promise.all([
@@ -31,7 +31,7 @@ const mostrarCuentas = async (req = request, res = response) => {
     }
 };
 
-const crearCuentaBancaria = async (req, res) => {
+const postCuenta = async (req = request, res = response) => {
     const data = req.body;
     try {
         // Generar número de cuenta aleatorio
@@ -43,7 +43,6 @@ const crearCuentaBancaria = async (req, res) => {
 
         // Verificar si el propietario existe
         const propietarioExistente = await Usuario.findById(data.usuario);
-
         if (!propietarioExistente) {
             return res.status(404).json({
                 message: 'El propietario de la cuenta no existe'
@@ -51,9 +50,7 @@ const crearCuentaBancaria = async (req, res) => {
         }
 
         // Verificar si la cuenta de origen ya existe
-        console.log(numCuenta);
         const cuentaExistente = await Cuenta.findOne({ numCuenta });
-
         if (cuentaExistente) {
             return res.status(400).json({
                 message: 'La cuenta de origen ya existe'
@@ -62,10 +59,10 @@ const crearCuentaBancaria = async (req, res) => {
 
         // Crear la cuenta bancaria
         const nuevaCuenta = new Cuenta({
-            numCuenta,
             usuario: data.usuario,
-            tipo_cuenta: data.tipo_cuenta,
-            capital: data.capital
+            numCuenta,
+            capital: data.capital,
+            tipo_cuenta: data.tipo_cuenta
         });
 
         // Guardar la cuenta en la base de datos
@@ -73,6 +70,7 @@ const crearCuentaBancaria = async (req, res) => {
 
         // Agregar el id de la cuenta al nuevo propietario
         propietarioExistente.no_cuenta.push(nuevaCuenta._id);
+        console.log(propietarioExistente.no_cuenta);
         await propietarioExistente.save();
 
         res.json({
@@ -87,7 +85,20 @@ const crearCuentaBancaria = async (req, res) => {
     }
 };
 
-const eliminarCuenta = async (req, res) => {
+const putCuenta = async (req = request, res = response) => {
+    const { id } = req.params;
+
+        // Buscar la cuenta por su ID
+        const cuenta = await Cuenta.findById(id);
+
+        if (!cuenta) {
+            return res.status(404).json({
+                message: 'No se encontró la cuenta bancaria'
+            });
+        }
+}
+
+const deleteCuenta = async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -122,7 +133,8 @@ const eliminarCuenta = async (req, res) => {
 };
 
 module.exports = {
-    mostrarCuentasActivas: mostrarCuentas,
-    crearCuentaBancaria,
-    eliminarCuenta,
+    getCuentas,
+    postCuenta,
+    putCuenta,
+    deleteCuenta,
 }

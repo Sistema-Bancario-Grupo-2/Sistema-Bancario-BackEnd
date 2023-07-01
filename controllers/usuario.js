@@ -2,6 +2,7 @@ const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 
 const Usuario = require('../models/usuario');
+const Cuenta = require('../models/cuenta')
 
 const defaultAdmin = async () => {
     try {
@@ -25,8 +26,8 @@ const defaultAdmin = async () => {
     }
 }
 
-const getUsuarios = async () => {
-    const query = { estado: true };
+const getUsuarios = async (req = request, res = response) => {
+    const query = {};
 
     const listaUsuarios = await Promise.all([
         Usuario.countDocuments(query),
@@ -39,9 +40,14 @@ const getUsuarios = async () => {
     });
 }
 
-const postUsuarioCliente = async (req = request, res = response) => {
-    const { dpi, user, nombre, correo, password, direccion, celular, ingresos_mensuales } = req.body;
-    const usuarioDB = new Usuario({ dpi, user, nombre, correo, password, direccion, celular, ingresos_mensuales });
+const postUsuario = async (req = request, res = response) => {
+
+    const usuario = req.usuario;
+
+    console.log(usuario);
+
+    const { dpi, user, nombre, correo, password, direccion, celular, ingresos_mensuales, rol } = req.body;
+    const usuarioDB = new Usuario({ dpi, user, nombre, correo, password, direccion, celular, ingresos_mensuales, rol });
 
     //Encriptar password
     const salt = bcryptjs.genSaltSync();
@@ -56,14 +62,44 @@ const postUsuarioCliente = async (req = request, res = response) => {
     });
 }
 
-const putUsuarioCliente = async ( req = request, res = response ) => {
+const putUsuario = async (req = request, res = response) => {
     const { id } = req.params;
+    const user = req.usuario;
 
-    //Ignoramos el _id, rol, estado y google al momento de editar y mandar la petición en el req.body
-    const { _id, dpi, password, ...resto } = req.body;
+    if(user._id != id){
+        return res.status(404).json({
+            msg:'No se puede editar a otro usuario'
+        })
+    }
 
-    //editar y guardar
-    const usuarioEditado = await Usuario.findByIdAndUpdate(id, resto);
+    const { _id, dpi, password, correo, rol, favoritos, no_cuenta, ...resto } = req.body;
+    const usuarioExistente = await Usuario.findById(id);
+
+    if (!usuarioExistente) {
+        return res.status(404).json({
+            message: 'Usuario no encontrado'
+        });
+    }
+
+    const favoritosActualizados = [...usuarioExistente.favoritos];
+
+    if (favoritos && favoritos.length > 0) {
+        favoritos.forEach((nuevoFavorito) => {
+            const existenteIndex = favoritosActualizados.findIndex((favorito) => favorito.no_cuenta.toString() === nuevoFavorito.no_cuenta.toString());
+            if (existenteIndex !== -1) {
+                favoritosActualizados[existenteIndex].preferencia = nuevoFavorito.preferencia;
+            } else {
+                favoritosActualizados.push(nuevoFavorito);
+            }
+        });
+    }
+
+    // Actualizar y guardar el usuario
+    const usuarioEditado = await Usuario.findByIdAndUpdate(
+        id,
+        { $set: resto, favoritos: favoritosActualizados },
+        { new: true }
+    );
 
     res.json({
         msg: 'PUT API de usuario',
@@ -71,10 +107,22 @@ const putUsuarioCliente = async ( req = request, res = response ) => {
     });
 }
 
-const deleteUsuarioCliente = async (req = request, res = response) => {
+const deleteUsuario = async (req = request, res = response) => {
     const { id } = req.params;
 
-    const usuarioEliminado = await Usuario.findByIdAndDelete(id);
+    let cuentasEliminadas;
+
+    const buscarUsuario = await Usuario.findById(id);
+
+    const buscarCuentas = await Cuenta.find( {usuario: buscarUsuario._id} )
+
+    if(buscarCuentas){
+        buscarCuentas.map( async ({_id}) => {
+            cuentasEliminadas = await Cuenta.findByIdAndDelete(_id);
+        })
+    }
+
+    const usuarioEliminado = await Usuario.findByIdAndDelete(buscarUsuario._id);
 
     res.json({
         msg: 'Usuario eliminado existosamente',
@@ -86,7 +134,7 @@ const deleteUsuarioCliente = async (req = request, res = response) => {
 module.exports = {
     defaultAdmin,
     getUsuarios,
-    postUsuarioCliente,
-    putUsuarioCliente, 
-    deleteUsuarioCliente
+    postUsuario,
+    putUsuario,
+    deleteUsuario
 }

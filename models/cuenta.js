@@ -11,7 +11,7 @@ const CuentaSchema = Schema({
         ref: 'Usuario',
         required: true,
     },
-    tipo_cuenta: {
+    tipo_cuenta:{
         type: String,
         required: true,
     },
@@ -25,7 +25,7 @@ const CuentaSchema = Schema({
         },
         convenio: {
             type: String,
-        }, 
+        },
         fecha:{
             type: Date,
         }

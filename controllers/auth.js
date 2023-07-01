@@ -7,16 +7,8 @@ const login = async (req = request, res = response) => {
     const { correo, password } = req.body;
 
     try {
+        const usuario = await Usuario.findOne({ correo })
 
-        //Verficiar si el email existe
-        const usuario = await Usuario.findOne({ correo });
-        // if (!usuario) {
-        //     return res.status(400).json({
-        //         msg: 'Usuario / Password no son correctos - (El correo no existe jaja)'
-        //     });
-        // }
-
-        //Verificar la password
         const validarPassword = bcrypt.compareSync(password, usuario.password);
         if (!validarPassword) {
             return res.status(400).json({
@@ -25,9 +17,7 @@ const login = async (req = request, res = response) => {
         }
 
         //Generar JWT
-        // const token = await generarJWT(usuario.id, usuario.nombre, usuario.cart);
-
-        const token = 123456;
+        const token = await generarJWT(usuario.id, usuario.nombre, usuario.cart);
 
         res.json({
             msg: 'Login PATH',
@@ -38,7 +28,7 @@ const login = async (req = request, res = response) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            msg: 'Hable con el administrador (BackEnd)'
+            msg: 'Error de login, asegurese de que este todo correcto'
         });
     }
 }

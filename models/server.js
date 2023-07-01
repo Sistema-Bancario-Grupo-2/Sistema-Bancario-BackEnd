@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors')
 const { dbConnection } = require('../database/config')
-const { defaultAdmin } = require('../controllers/usuario')
+const { defaultAdmin } = require('../controllers/usuario');
+const { defaultTipoCuentas } = require('../controllers/tipoCuenta');
 
 class Server {
     constructor() {
@@ -21,6 +22,9 @@ class Server {
 
         this.routes();
 
+        
+        defaultTipoCuentas();
+        
         defaultAdmin();
     }
 

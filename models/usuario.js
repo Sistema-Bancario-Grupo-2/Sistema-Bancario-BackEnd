@@ -43,6 +43,7 @@ const UsuarioSchema = Schema({
         },
         preferencia: {
             type: Boolean,
+            default: true
         }
     }],
     rol: {

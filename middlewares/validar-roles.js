@@ -6,10 +6,10 @@ const esAdminRole = ( req = request, res = response, next ) => {
             msg: 'Se quiere verficar el role sin validar el token primero'
         });
     }
-    const { rol, user  } = req.usuario
+    const { rol, user } = req.usuario
     if ( rol !== 'ADMIN_ROLE') {
         return res.status(401).json({
-            msg: `${ user } no es administrado - No puede hacer esto`
+            msg: `${ user } no es administrador, no puede hacer esto`
         });
     }
     next();
