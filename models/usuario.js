@@ -39,7 +39,7 @@ const UsuarioSchema = Schema({
     favoritos: [{
         no_cuenta: {
             type: Schema.Types.ObjectId,
-            ref: 'Cuenta',
+            ref: 'Usuario',
         },
         preferencia: {
             type: Boolean,

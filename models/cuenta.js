@@ -20,7 +20,7 @@ const CuentaSchema = Schema({
         required: true,
     },
     registro: [{
-        gasto_o_ganancia: {
+        egreso: {
             type: Number,
         },
         convenio: {

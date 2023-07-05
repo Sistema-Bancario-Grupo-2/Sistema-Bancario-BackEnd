@@ -110,8 +110,6 @@ const putUsuario = async (req = request, res = response) => {
 const deleteUsuario = async (req = request, res = response) => {
     const { id } = req.params;
 
-    let cuentasEliminadas;
-
     const buscarUsuario = await Usuario.findById(id);
 
     const buscarCuentas = await Cuenta.find( {usuario: buscarUsuario._id} )

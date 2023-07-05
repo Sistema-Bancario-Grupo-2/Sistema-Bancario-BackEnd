@@ -16,11 +16,12 @@ const login = async (req = request, res = response) => {
             });
         }
 
-        //Generar JWT
-        const token = await generarJWT(usuario.id, usuario.nombre, usuario.cart);
+        const token = await generarJWT(usuario.id, usuario.nombre);
 
         res.json({
             msg: 'Login PATH',
+            user: usuario.user,
+            rol: usuario.rol,
             correo, password,
             token
         })

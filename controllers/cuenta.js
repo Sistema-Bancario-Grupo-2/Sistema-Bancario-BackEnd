@@ -13,20 +13,20 @@ const getCuentas = async (req = request, res = response) => {
 
         console.log(listaCuentas);
 
-        if (listaCuentas) {
+        if (!listaCuentas) {
             return res.json({
                 message: 'No hay cuentas bancarias',
             })
         }
         res.json({
-            message: 'Cuentas bancarias activas',
+            message: 'Cuentas bancarias',
             cuentas: listaCuentas
         });
 
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            message: 'Error al obtener las cuentas bancarias activas'
+            message: 'Error al obtener las cuentas bancarias'
         });
     }
 };
@@ -87,36 +87,57 @@ const postCuenta = async (req = request, res = response) => {
 
 const putCuenta = async (req = request, res = response) => {
     const { id } = req.params;
+    const { usuario, ...resto } = req.body;
 
-        // Buscar la cuenta por su ID
-        const cuenta = await Cuenta.findById(id);
+    // Buscar la cuenta por su ID
+    const cuenta = await Cuenta.findByIdAndUpdate(id, resto);
 
-        if (!cuenta) {
-            return res.status(404).json({
-                message: 'No se encontró la cuenta bancaria'
-            });
+    if (cuenta.usuario.toString() !== usuario) {
+        const usuarioCuenta = await Usuario.findById(cuenta.usuario);
+        const usuarioNuevaCuenta = await Usuario.findById(usuario);
+        cuenta.usuario = usuario;
+
+        if (usuarioCuenta.no_cuenta.length > 0 && cuenta.usuario !== usuario) {
+            const indexCuentaAnterior = usuarioCuenta.no_cuenta.indexOf(id);
+            if (indexCuentaAnterior !== -1) {
+                usuarioCuenta.no_cuenta.splice(indexCuentaAnterior, 1);
+                await usuarioCuenta.save();
+            }
         }
-}
+
+        if (!usuarioNuevaCuenta.no_cuenta.includes(id)) {
+            usuarioNuevaCuenta.no_cuenta.push(id);
+            await usuarioNuevaCuenta.save();
+        }
+    }
+    await cuenta.save();
+
+
+    res.json({
+        msg: 'Modificado con exito',
+    })
+
+};
 
 const deleteCuenta = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Buscar la cuenta por su ID
-        const cuenta = await Cuenta.findById(id);
+        const usuarioCuenta = await Usuario.findOne({ no_cuenta: id })
 
-        if (!cuenta) {
-            return res.status(404).json({
-                message: 'No se encontró la cuenta bancaria'
-            });
+        let indiceCuentaUsuario;
+
+        for (let i = 0; i < usuarioCuenta.no_cuenta.length; i++) {
+            if (usuarioCuenta.no_cuenta[i].toString() === id) {
+                indiceCuentaUsuario = i;
+            }
+
         }
+        console.log(indiceCuentaUsuario);
 
-        // Establecer el estado de la cuenta en falso
-        // cuenta.estado = false;
+        usuarioCuenta.no_cuenta.splice(indiceCuentaUsuario, 1);
 
-        // Guardar los cambios en la base de datos
-
-        const usuarioCuenta = await Usuario.findOne({ no_cuenta: cuenta._id })
+        await usuarioCuenta.save();
 
         const cuentaEliminada = await Cuenta.findByIdAndDelete(id);
 
@@ -132,9 +153,70 @@ const deleteCuenta = async (req, res) => {
     }
 };
 
+const transferencias = async (req = request, res = response) => {
+    const { monto, numCuenta } = req.body;
+    const { no_cuenta } = req.usuario;
+    const fechaActual = new Date();
+
+    const cuentaTransferencia = await Cuenta.findById(no_cuenta);
+
+    const registro1 = cuentaTransferencia.registro.length;
+
+    if (no_cuenta == numCuenta) {
+        return res.status(404).json({
+            msg: 'No se puede realizar una transferencia a si mismo'
+        })
+    }
+
+    if (monto >= 10000) {
+        return res.status(404).json({
+            msg: 'No se puede hacer una transferencia de mas de Q10,000.00'
+        })
+    }
+
+    if (cuentaTransferencia.capital - monto < 0) {
+        return res.status(406).json({
+            msg: 'No se puede realizar esta transferencia, por falta de fondos!!'
+        })
+    }
+    cuentaTransferencia.capital = cuentaTransferencia.capital - monto;
+
+    const registroTransferencia = {
+        egreso: monto,
+        fecha: fechaActual,
+        convenio: 'transferencia'
+    }
+
+    cuentaTransferencia.registro[registro1] = registroTransferencia;
+
+    await cuentaTransferencia.save();
+
+    const cuentaTransferir = await Cuenta.findOne({ numCuenta });
+
+    const registro2 = cuentaTransferir.registro.length;
+
+    cuentaTransferir.capital = cuentaTransferir.capital + monto;
+
+    const registroCuentaTransferir = {
+        egreso: monto,
+        fecha: fechaActual,
+        convenio: 'transferencia'
+    }
+
+    cuentaTransferir.registro[registro2] = registroCuentaTransferir;
+
+    await cuentaTransferir.save();
+
+    res.json({
+        msg: 'Se ha hecho la transferencia con exito!'
+
+    })
+}
+
 module.exports = {
     getCuentas,
     postCuenta,
     putCuenta,
     deleteCuenta,
+    transferencias
 }
