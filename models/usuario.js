@@ -37,7 +37,7 @@ const UsuarioSchema = Schema({
         ref: 'Cuenta',
     }],
     favoritos: [{
-        no_cuenta: {
+        usuarioId: {
             type: Schema.Types.ObjectId,
             ref: 'Usuario',
         },

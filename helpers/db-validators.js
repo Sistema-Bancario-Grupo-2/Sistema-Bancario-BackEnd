@@ -2,7 +2,6 @@ const Usuario = require('../models/usuario');
 const Cuenta = require('../models/cuenta');
 const Role = require('../models/role');
 const TipoCuenta = require('../models/tipoCuenta');
-const { request } = require('express');
 
 const tipoCuentaValido = async (tipoCuenta = '') => {
     const existeTipoCuenta = await TipoCuenta.findOne({ tipo: tipoCuenta.toUpperCase() })
@@ -33,9 +32,13 @@ const esRoleValido = async (rol = '') => {
 }
 
 const existeUsuarioPorId = async (id) => {
-    const existIdOfUser = await Usuario.findById(id);
-    if (!existIdOfUser) {
-        throw new Error(`El usuario con el id: ${id} no existe en la DB`);
+    if (id.length < 24) {
+        throw new Error(`${id} No es un id valido, debe contener 24 caracteres`);
+    } else {
+        const existIdOfUser = await Usuario.findById(id);
+        if (!existIdOfUser) {
+            throw new Error(`El usuario con el id: ${id} no existe en la DB`);
+        }
     }
 }
 const existeUser = async (user = '') => {
@@ -61,7 +64,7 @@ const buscarCuentaFavoritos = async (favoritos) => {
                 if (!existIdOfAccount) {
                     throw new Error(`El NO. Cuenta: ${no_cuenta} no existe en la DB`);
                 }
-            } 
+            }
         }
     }
 }
@@ -73,8 +76,8 @@ const dpiValido = async (dpi = '') => {
 }
 
 const existDPI = async (dpi) => {
-    const usuarioDB = await Usuario.findOne({dpi});
-    if(usuarioDB){
+    const usuarioDB = await Usuario.findOne({ dpi });
+    if (usuarioDB) {
         throw new Error(`El dpi: ${dpi} ya existe en la base de datos.`)
     }
 }
@@ -87,8 +90,8 @@ const ingresoValido = async (ingreso) => {
 
 
 const existeCuentaPorNumCuenta = async (numCuenta) => {
-    const existCuenta = await Cuenta.findOne({numCuenta});
-    if(!existCuenta){
+    const existCuenta = await Cuenta.findOne({ numCuenta });
+    if (!existCuenta) {
         throw new Error(`El numero de cuenta ${numCuenta} no existe en la base de datos.`);
     }
 }

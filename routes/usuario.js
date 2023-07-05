@@ -1,13 +1,14 @@
 const { Router } = require('express');
 const router = Router()
-const { getUsuarios, postUsuario, putUsuario, deleteUsuario } = require('../controllers/usuario');
+const { getUsuarios, postUsuario, putUsuario, deleteUsuario, addFavoritos } = require('../controllers/usuario');
 const { check } = require('express-validator');
-const { dpiValido, ifExistCorreo, ingresoValido, existeUser, buscarCuentaFavoritos, existeUsuarioPorId, existDPI } = require('../helpers/db-validators');
+const { dpiValido, ifExistCorreo, ingresoValido, existeUser, buscarCuentaFavoritos, existeUsuarioPorId, existDPI, idCaracteres } = require('../helpers/db-validators');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
-const { esAdminRole } = require('../middlewares/validar-roles');
+const { esAdminRole, esClienteRole } = require('../middlewares/validar-roles');
 
 router.get('/', getUsuarios);
+
 router.post('/crear',
     [
         validarJWT,
@@ -28,8 +29,20 @@ router.post('/crear',
         validarCampos,
     ],
     postUsuario
-);
-router.put('/editar/:id', [
+    );
+
+    router.post('/add/favoritos/:id',
+        [
+            validarJWT,
+            check('id', 'Se requiere un id valido').not().isEmpty(),
+            check('id').custom(idCaracteres),
+            check('id', 'El id ingresado no es un id').isMongoId(),
+            check('id').custom(existeUsuarioPorId),
+            esClienteRole,
+        ],
+        addFavoritos);
+
+    router.put('/editar/:id', [
     validarJWT,
     esAdminRole,
     check('id', 'No es un id valido').isMongoId(),
@@ -39,6 +52,7 @@ router.put('/editar/:id', [
     check('ingresos_mensuales', 'Ingresos mensuales mayores a 100').custom(ingresoValido),
     validarCampos
 ], putUsuario);
+
 router.delete('/eliminar/:id', [
     validarJWT,
     esAdminRole,
@@ -46,5 +60,6 @@ router.delete('/eliminar/:id', [
     check('id', 'No existe en la base de datos').custom(existeUsuarioPorId),
     validarCampos
 ], deleteUsuario);
+
 
 module.exports = router

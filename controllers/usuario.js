@@ -66,9 +66,9 @@ const putUsuario = async (req = request, res = response) => {
     const { id } = req.params;
     const user = req.usuario;
 
-    if(user._id != id){
+    if (user._id != id) {
         return res.status(404).json({
-            msg:'No se puede editar a otro usuario'
+            msg: 'No se puede editar a otro usuario'
         })
     }
 
@@ -112,10 +112,10 @@ const deleteUsuario = async (req = request, res = response) => {
 
     const buscarUsuario = await Usuario.findById(id);
 
-    const buscarCuentas = await Cuenta.find( {usuario: buscarUsuario._id} )
+    const buscarCuentas = await Cuenta.find({ usuario: buscarUsuario._id })
 
-    if(buscarCuentas){
-        buscarCuentas.map( async ({_id}) => {
+    if (buscarCuentas) {
+        buscarCuentas.map(async ({ _id }) => {
             cuentasEliminadas = await Cuenta.findByIdAndDelete(_id);
         })
     }
@@ -129,10 +129,52 @@ const deleteUsuario = async (req = request, res = response) => {
 
 }
 
+const addFavoritos = async (req = request, res = response) => {
+    const usuarioId = req.params;
+    const { _id } = req.usuario;
+
+    try {
+
+        const usuarioFavoritos = await Usuario.findById(_id);
+
+        for (const userId of usuarioFavoritos.favoritos) {
+            console.log(userId);
+            if( userId.usuarioId === usuarioId.id){
+                return res.json({
+                    msg:'Ya esta el usuario en favoritos'
+                })
+            }
+        }
+
+        const nuevoFavorito = {
+            usuarioId: usuarioId.id,
+            preferencia: true
+        }
+
+        usuarioFavoritos.favoritos[usuarioFavoritos.favoritos.length] = nuevoFavorito;
+
+        // await usuarioFavoritos.save();
+
+        res.json({
+            msg:'Nuevo favorito agregado!!',
+            usuarioFavoritos
+        })
+
+    } catch (error) {
+        console.log(error);
+    }
+
+
+
+
+
+}
+
 module.exports = {
     defaultAdmin,
     getUsuarios,
     postUsuario,
     putUsuario,
-    deleteUsuario
+    deleteUsuario,
+    addFavoritos
 }
