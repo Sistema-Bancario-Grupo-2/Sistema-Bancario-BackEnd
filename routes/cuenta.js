@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const router = Router();
-const { postCuenta, getCuentas, putCuenta, deleteCuenta, transferencias } = require('../controllers/cuenta');
+const { postCuenta, getCuentas, putCuenta, deleteCuenta, transferencias, getCuentasConMasMovimientos } = require('../controllers/cuenta');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
@@ -8,6 +8,17 @@ const {  existeCuentaPorNumCuenta, tipoCuentaValido, existeCuentaPorId, existeUs
 const { esAdminRole, esClienteRole } = require('../middlewares/validar-roles');
 
 router.get('/', getCuentas);
+
+router.get('/registros/',
+    [
+        validarJWT,
+        esAdminRole,
+        check('orden', 'Orden es requerido').not().isEmpty(),
+        check('orden', 'No es valido, tiene que ser un numero entre 1 (ascendente) o -1 (descendente)').isIn([1, -1]),
+        validarCampos
+    ],
+    getCuentasConMasMovimientos
+);
 
 router.post('/crear',
     [   
@@ -27,7 +38,7 @@ router.post('/transferencia/', [
     validarJWT,
     esClienteRole,
     check('monto', 'El monto a transferir es requerido').not().isEmpty(),
-    check('numCuenta', 'El numero de cuenta es requerido ').not().isEmpty(),
+    check('numCuenta', 'El numero de cuenta es requerido').not().isEmpty(),
     check('numCuenta').custom(existeCuentaPorNumCuenta),
     validarCampos,
 ],transferencias),

@@ -152,19 +152,48 @@ const deleteCuenta = async (req, res) => {
         });
     }
 };
-
+/*Aun no esta bien definido observenlo y me dicen que opinan*/ 
 const transferencias = async (req = request, res = response) => {
-    const { monto, numCuenta } = req.body;
-    const { no_cuenta } = req.usuario;
-    const fechaActual = new Date();
+    const
+        {
+            monto, // Monto es la cantidad de dinero que se le va a tranferir a la otra cuenta
+            numCuenta, // numCuenta es el numero de cuenta a la cual se va a hacer la tranferencia
+            seleccionCuenta,
+            /*
+            seleccionCuenta va a ser el numero de cuenta que va a escoger el 
+            usuario que va a hacer la transferencia. si el usuario quiere hacer la transferencia 
+            desde la primer cuenta de su lista de cuentas va a escoger la opcion 0 por asi decirlo, 
+            si quiere la segunda cuenta de su listado de cuentas va a escoger la opcion 1, etc...
+            */
+        } = req.body;
+    const 
+    { 
+        no_cuenta // Este campo es la cuenta o las cuentas que tiene el usuario,
+    } = req.usuario;
+    const fechaActual = new Date(); // Fecha actual en la que fue hecha la tranferencia.
+    
 
-    const cuentaTransferencia = await Cuenta.findById(no_cuenta);
+    /* 
+    Este if sirve para ver desde que cuenta va a querer que sea la transferencia,
+    debido a que si tiene mas de una cuenta que el usuario tenga la disponibilidad de 
+    elegir desde que cuenta quiere que sea su transferencia. Para el frontend se podria poner 
+    una pestaña o vista que se llame tranferenica y a la hora de darle a esa pestaña le salga 
+    un mensaje o una eleccion de que cuenta va a ser la que quiere para hacer la transferencia
+    */
+
+    const cuentaTransferencia = await Cuenta.findById(no_cuenta[seleccionCuenta]);
 
     const registro1 = cuentaTransferencia.registro.length;
 
-    if (no_cuenta == numCuenta) {
+    if (cuentaTransferencia.numCuenta == numCuenta) {
         return res.status(404).json({
             msg: 'No se puede realizar una transferencia a si mismo'
+        })
+    }
+
+    if (monto <= 0) {
+        return res.status(404).json({
+            msg: 'No se puede esta transferencia vacia'
         })
     }
 
@@ -213,10 +242,34 @@ const transferencias = async (req = request, res = response) => {
     })
 }
 
+const getCuentasConMasMovimientos = async (req = request, res = response) => {
+    const { orden } = req.body;
+    let cuentas;
+    let listaCuentas;
+
+    try {
+
+        if (orden === 1) {
+            cuentas = await Cuenta.find();
+            for (const { registro, usuario } of cuentas) {
+                console.log(
+                    registro.sort(function (a, b) {
+                        return a - b;
+                    })
+                );
+            }
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getCuentas,
     postCuenta,
     putCuenta,
     deleteCuenta,
-    transferencias
+    transferencias,
+    getCuentasConMasMovimientos
 }

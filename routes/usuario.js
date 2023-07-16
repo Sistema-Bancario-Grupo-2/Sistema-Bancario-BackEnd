@@ -2,7 +2,7 @@ const { Router } = require('express');
 const router = Router()
 const { getUsuarios, postUsuario, putUsuario, deleteUsuario, addFavoritos } = require('../controllers/usuario');
 const { check } = require('express-validator');
-const { dpiValido, ifExistCorreo, ingresoValido, existeUser, buscarCuentaFavoritos, existeUsuarioPorId, existDPI, idCaracteres } = require('../helpers/db-validators');
+const { dpiValido, ifExistCorreo, ingresoValido, existeUser, buscarCuentaFavoritos, existeUsuarioPorId, existDPI, idCaracteres, ascenDescenNumber } = require('../helpers/db-validators');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 const { esAdminRole, esClienteRole } = require('../middlewares/validar-roles');
@@ -29,20 +29,20 @@ router.post('/crear',
         validarCampos,
     ],
     postUsuario
-    );
+);
 
-    router.post('/add/favoritos/:id',
-        [
-            validarJWT,
-            check('id', 'Se requiere un id valido').not().isEmpty(),
-            check('id').custom(idCaracteres),
-            check('id', 'El id ingresado no es un id').isMongoId(),
-            check('id').custom(existeUsuarioPorId),
-            esClienteRole,
-        ],
-        addFavoritos);
+router.post('/add/favoritos/:id',
+    [
+        validarJWT,
+        check('id', 'Se requiere un id valido').not().isEmpty(),
+        check('id').custom(idCaracteres),
+        check('id', 'El id ingresado no es un id').isMongoId(),
+        check('id').custom(existeUsuarioPorId),
+        esClienteRole,
+    ],
+    addFavoritos);
 
-    router.put('/editar/:id', [
+router.put('/editar/:id', [
     validarJWT,
     esAdminRole,
     check('id', 'No es un id valido').isMongoId(),

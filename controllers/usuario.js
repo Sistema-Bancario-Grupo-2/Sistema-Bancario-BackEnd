@@ -139,9 +139,9 @@ const addFavoritos = async (req = request, res = response) => {
 
         for (const userId of usuarioFavoritos.favoritos) {
             console.log(userId);
-            if( userId.usuarioId === usuarioId.id){
+            if (userId.usuarioId === usuarioId.id) {
                 return res.json({
-                    msg:'Ya esta el usuario en favoritos'
+                    msg: 'Ya esta el usuario en favoritos'
                 })
             }
         }
@@ -156,7 +156,7 @@ const addFavoritos = async (req = request, res = response) => {
         // await usuarioFavoritos.save();
 
         res.json({
-            msg:'Nuevo favorito agregado!!',
+            msg: 'Nuevo favorito agregado!!',
             usuarioFavoritos
         })
 
@@ -176,5 +176,5 @@ module.exports = {
     postUsuario,
     putUsuario,
     deleteUsuario,
-    addFavoritos
+    addFavoritos,
 }
