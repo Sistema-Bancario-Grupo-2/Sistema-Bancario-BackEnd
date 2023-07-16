@@ -7,11 +7,14 @@ const Usuario = require('../models/usuario');
 const getCuentas = async (req = request, res = response) => {
     try {
         // Buscar todas las cuentas con estado activo
-        const listaCuentas = await Promise.all([
-            Cuenta.find()
-        ])
 
-        console.log(listaCuentas);
+        const listaCuentas = await Cuenta.find(
+
+        );
+
+        // const listaCuentas = await Promise.all([
+        //     Cuenta.find()
+        // ])
 
         if (!listaCuentas) {
             return res.json({

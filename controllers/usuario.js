@@ -29,10 +29,14 @@ const defaultAdmin = async () => {
 const getUsuarios = async (req = request, res = response) => {
     const query = {};
 
-    const listaUsuarios = await Promise.all([
-        Usuario.countDocuments(query),
-        Usuario.find(query)
-    ]);
+    const listaUsuarios = await Usuario.find(
+        
+    )
+
+    // const listaUsuarios = await Promise.all([
+    //     Usuario.countDocuments(query),
+    //     Usuario.find(query)
+    // ]);
 
     res.json({
         msg: 'GET API de usuarios',
