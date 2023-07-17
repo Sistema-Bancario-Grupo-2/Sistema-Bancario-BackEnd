@@ -32,13 +32,10 @@ const esRoleValido = async (rol = '') => {
 }
 
 const existeUsuarioPorId = async (id) => {
-    if (id.length < 24) {
-        throw new Error(`${id} No es un id valido, debe contener 24 caracteres`);
-    } else {
-        const existIdOfUser = await Usuario.findById(id);
-        if (!existIdOfUser) {
-            throw new Error(`El usuario con el id: ${id} no existe en la DB`);
-        }
+    const existIdOfUser = await Usuario.findById(id);
+    console.log(existIdOfUser);
+    if (!existIdOfUser) {
+        throw new Error(`El usuario con el id: ${id} no existe en la DB`);
     }
 }
 const existeUser = async (user = '') => {

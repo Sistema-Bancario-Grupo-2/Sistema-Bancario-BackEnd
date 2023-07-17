@@ -28,6 +28,9 @@ const CuentaSchema = Schema({
         },
         fecha:{
             type: Date,
+        }, 
+        descripcion:{
+            type: String,
         }
     }]
 
