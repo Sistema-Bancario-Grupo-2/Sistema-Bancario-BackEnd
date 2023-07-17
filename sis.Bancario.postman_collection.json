@@ -1,0 +1,497 @@
+{
+	"info": {
+		"_postman_id": "36cc0154-ddad-4ebd-a41a-7de1690c44db",
+		"name": "sis.Bancario",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Usuario",
+			"item": [
+				{
+					"name": "Favoritos",
+					"item": [
+						{
+							"name": "Add Favoritos",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NDlmYWExZTRmZGVhM2FhMmEzN2YxYzkiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTYxMTk1NCwiZXhwIjoxNjg5NjI2MzU0fQ.whnp2zqJZDzP58bR4yl3GZJk3mliaPxl1jnJJCuZT4Q",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "127.0.0.1:8080/banco/usuario/add/favoritos/649faa1e4fdea3aa2a37f1c1",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"banco",
+										"usuario",
+										"add",
+										"favoritos",
+										"649faa1e4fdea3aa2a37f1c1"
+									],
+									"query": [
+										{
+											"key": "x-token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NDlmYWExZTRmZGVhM2FhMmEzN2YxYzkiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTYxMTk1NCwiZXhwIjoxNjg5NjI2MzU0fQ.whnp2zqJZDzP58bR4yl3GZJk3mliaPxl1jnJJCuZT4Q",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Favorito",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NDlmYWExZTRmZGVhM2FhMmEzN2YxYzkiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTYxMTk1NCwiZXhwIjoxNjg5NjI2MzU0fQ.whnp2zqJZDzP58bR4yl3GZJk3mliaPxl1jnJJCuZT4Q",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"correo\":\"admin@gmail.com\",\r\n    \"password\":\"ADMINB\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:8080/banco/usuario/delete/favoritos/649faa1e4fdea3aa2a37f1c1",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"banco",
+										"usuario",
+										"delete",
+										"favoritos",
+										"649faa1e4fdea3aa2a37f1c1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "mostrarUsuarios",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\":\"Carlos\",\r\n    \"correo\":\"ADMINB@gmail.com\",\r\n    \"password\":\"ADMINB\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/banco/usuario/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"banco",
+								"usuario",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Usuarios",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"correo\": \"marvin@gmail.com\",\r\n    \"password\": \"123456\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/banco/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"banco",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "agregarUsuario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NDlmYmY2YTZmMzYwZTUwMWFkNWMwZGMiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTUxMzk2NiwiZXhwIjoxNjg5NTI4MzY2fQ.DKjN-_yJoKLDdUixnUdccnFGZTckfSYYucFhp3g5ZS0",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\":\"Negro\", //Un nombre o un apodo del usuario\r\n    \"dpi\": \"123456789\", //13 digitos\r\n    \"ingresos_mensuales\": \"1500\", //No menos de 100\r\n    \"correo\":\"men@gmail.com\", //correo del usuario\r\n    \"password\":\"123456\",\r\n    \"direccion\":\"Zona 3 barcenas villa nueva Guatemala\",\r\n    \"celular\":\"12345678\"\r\n    // Por defecto esta el rol Cliente\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/banco/usuario/crear",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"banco",
+								"usuario",
+								"crear"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "actualizarUsuario",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NDlmYmY2YTZmMzYwZTUwMWFkNWMwZGMiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTU1MTk1MSwiZXhwIjoxNjg5NTY2MzUxfQ.3PGoJbjVWhfHQAb_y_9v3mNVy96vxi-ftHZXZ2TsfDc",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\":\"Negro\", //Un nombre o un apodo del usuario\r\n    \"dpi\": \"123456789\", //13 digitos\r\n    \"ingresos_mensuales\": \"1500\", //No menos de 100\r\n    \"correo\":\"men@gmail.com\", //correo del usuario\r\n    \"password\":\"123456\",\r\n    \"direccion\":\"Zona 3 barcenas villa nueva Guatemala\",\r\n    \"celular\":\"12345678\"\r\n    // Solo un administrador podra actualizar todos los campos de si mismo y de un cliente, menos los de otro administrador\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/banco/usuario/editar/649fbf6a6f360e501ad5c0dc",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"banco",
+								"usuario",
+								"editar",
+								"649fbf6a6f360e501ad5c0dc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminarUsuario",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NDg1ZTRiYWY5Y2QyNDJmYjk0ZTE2ZTEiLCJpYXQiOjE2ODY0OTY4ODMsImV4cCI6MTY4NjUxNDg4M30.W-4CQKcgaKDQavpQQ9ty8fcli2rvQC0nN2xgb-C0C28",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/banco/usuario/eliminar/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"banco",
+								"usuario",
+								"eliminar",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UsuarioById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:8080/banco/usuario/649faa1e4fdea3aa2a37f1c1",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"banco",
+								"usuario",
+								"649faa1e4fdea3aa2a37f1c1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "cuenta",
+			"item": [
+				{
+					"name": "transaccion",
+					"item": [
+						{
+							"name": "Transferencia",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NDdiYjg5NzM2NTIzYTQ4OWU3NTliYjAiLCJpYXQiOjE2ODU4MzA4NTUsImV4cCI6MTY4NTg0ODg1NX0.3ABXMDdIsdVNx7zyFv3NRoSOxg1cUz93m0D9c3Jx7g4",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"numCuenta\": \"8fccd324-b9e0-4385-8066-bfc39dcad8e7\", //El numero de cuenta a la que va a ir la transferencia\r\n    \"monto\": 100, // Cuanto es que se va a tranferir\r\n    \"seleccionCuenta\":\"\" //Cuenta del usuario que va a hacer transferencia\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/banco/cuenta/transferencia/",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"banco",
+										"cuenta",
+										"transferencia",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Transacciones",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NGI0YzM3ZTU2NjIxMDk5MGFkZDJiZWEiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTYxMDIzMywiZXhwIjoxNjg5NjI0NjMzfQ.Gc73LQ9wB_4D7S6BYrQHnJhlPVEkchM6eXZ8bDYOwTI",
+										"type": "default",
+										"disabled": true
+									},
+									{
+										"key": "x-token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NDlmYmY2YTZmMzYwZTUwMWFkNWMwZGMiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTYxMDgwMiwiZXhwIjoxNjg5NjI1MjAyfQ.asPGUZ1jwVRbMAc1W3MAeO93hIZcjk7ju7Vij35XUcg",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"numCuenta\":\"156bd040-1cb8-410c-98e4-be3f489a6d58\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/banco/cuenta/transacciones",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"banco",
+										"cuenta",
+										"transacciones"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Crear cuenta",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NDg1ZTRiYWY5Y2QyNDJmYjk0ZTE2ZTEiLCJpYXQiOjE2ODcyNzcyNDIsImV4cCI6MTY4NzI5NTI0Mn0.8C3_gTqAGgWDxx17VB2nl51-WHd_xlZ4oFYF5lwYQiI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"usuario\":\"6485e7d24fb3124dc8494d9a\", //Usuario al que va a estar vinculado\r\n    \"tipo_cuenta\":\"monetaria\", //Solo existen 4 tipos de cuenta monetaria, ahorro, tarjeta de credito y Prestamos\r\n    \"capital\": -1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/banco/cuenta/crear",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"banco",
+								"cuenta",
+								"crear"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar Cuenta",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NDc2YjQ3OWY2YzFjYTJmNTNlMGQ5MjQiLCJpYXQiOjE2ODU1MDEwNzMsImV4cCI6MTY4NTUxOTA3M30.awEiaiqr29duwjRvhmzjOfYVTcTvUhQL3-qm__2mHFs",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"tipo_cuenta\":\"monetaria\", // Solo existen 4 tipos de cuenta monetaria, ahorro, Tarjeta de credito y prestamos\r\n    \"capital\":50000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/banco/cuenta/editar/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"banco",
+								"cuenta",
+								"editar",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar cuenta",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NDg1ZTRiYWY5Y2QyNDJmYjk0ZTE2ZTEiLCJpYXQiOjE2ODcyNzcyNDIsImV4cCI6MTY4NzI5NTI0Mn0.8C3_gTqAGgWDxx17VB2nl51-WHd_xlZ4oFYF5lwYQiI",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/banco/cuenta/eliminar/6491d0efc0532b6163901511",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"banco",
+								"cuenta",
+								"eliminar",
+								"6491d0efc0532b6163901511"
+							],
+							"query": [
+								{
+									"key": "x-token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NDg1ZTRiYWY5Y2QyNDJmYjk0ZTE2ZTEiLCJpYXQiOjE2ODcyNzcyNDIsImV4cCI6MTY4NzI5NTI0Mn0.8C3_gTqAGgWDxx17VB2nl51-WHd_xlZ4oFYF5lwYQiI",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mostrar cuentas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/banco/cuenta/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"banco",
+								"cuenta",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
