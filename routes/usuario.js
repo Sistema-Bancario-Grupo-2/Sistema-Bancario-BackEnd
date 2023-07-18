@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const router = Router()
-const { getUsuarios, postUsuario, putUsuario, deleteUsuario, addFavoritos, eliminarFavorito, getUsuarioById } = require('../controllers/usuario');
+const { getUsuarios, postUsuario, putUsuario, deleteUsuario, addFavoritos, eliminarFavorito, getUsuarioById, getFavoritos } = require('../controllers/usuario');
 const { check } = require('express-validator');
 const { dpiValido, ifExistCorreo, ingresoValido, existeUser, buscarCuentaFavoritos, existeUsuarioPorId, existDPI, ascenDescenNumber } = require('../helpers/db-validators');
 const { validarCampos } = require('../middlewares/validar-campos');
@@ -8,6 +8,14 @@ const { validarJWT } = require('../middlewares/validar-jwt');
 const { esAdminRole, esClienteRole } = require('../middlewares/validar-roles');
 
 router.get('/', getUsuarios);
+
+router.get('/favoritos/',
+    [
+        validarJWT,
+        esClienteRole
+    ],
+    getFavoritos
+);
 
 router.get('/:id', [
 
@@ -25,7 +33,6 @@ router.post('/crear',
         check('dpi', 'El dpi ya existe en la db').custom(existDPI),
         check('user', 'User es obligatorio').not().isEmpty(),
         check('user', 'Este user ya existe').custom(existeUser),
-        check('nombre', 'El nombre es obligatorio').not().isEmpty(),
         check('correo', 'El correo es obligatorio').not().isEmpty(),
         check('correo', 'El correo ya existe').custom(ifExistCorreo),
         check('password', 'Password obligatorio').not().isEmpty(),
@@ -60,17 +67,18 @@ router.put('/delete/favoritos/:id',
         validarCampos
     ],
     eliminarFavorito
-),
+);
 
-    router.put('/editar/:id', [
-        validarJWT,
-        check('id', 'No es un id valido').isMongoId(),
-        check('id', 'No existe este usuario').custom(existeUsuarioPorId),
-        check('dpi', 'El dpi ya existe en la db').custom(existDPI),
-        check('favoritos', 'La cuenta no existe').custom(buscarCuentaFavoritos).not().isMongoId(),
-        check('ingresos_mensuales', 'Ingresos mensuales mayores a 100').custom(ingresoValido),
-        validarCampos
-    ], putUsuario);
+router.put('/editar/:id', [
+    validarJWT,
+    check('id', 'No es un id valido').isMongoId(),
+    check('id', 'No existe este usuario').custom(existeUsuarioPorId),
+    check('dpi').custom(dpiValido),
+    check('dpi', 'El dpi ya existe en la db').custom(existDPI),
+    check('favoritos', 'La cuenta no existe').custom(buscarCuentaFavoritos).not().isMongoId(),
+    check('ingresos_mensuales', 'Ingresos mensuales mayores a 100').custom(ingresoValido),
+    validarCampos
+], putUsuario);
 
 router.delete('/eliminar/:id', [
     validarJWT,

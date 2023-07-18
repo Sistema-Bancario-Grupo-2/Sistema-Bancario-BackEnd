@@ -6,7 +6,7 @@ const Usuario = require('../models/usuario');
 
 const getCuentas = async (req = request, res = response) => {
     try {
-        // Buscar todas las cuentas con estado activo
+        // Buscar todas las cuentas
 
         const listaCuentas = await Cuenta.find(
 
@@ -25,7 +25,6 @@ const getCuentas = async (req = request, res = response) => {
             message: 'Cuentas bancarias',
             cuentas: listaCuentas
         });
-
     } catch (error) {
         console.error(error);
         res.status(500).json({
@@ -34,34 +33,46 @@ const getCuentas = async (req = request, res = response) => {
     }
 };
 
-const getTransacciones = async (req = request, res = response) => {
-    
-    const {numCuenta} = req.body
-    const {id, no_cuenta} = req.usuario;
+const getCuentaById = async (req = req, res = response) => {
+    const { id } = req.params;
 
-    const cuentaTransacciones = await Cuenta.findOne({numCuenta});
+    const cuentaEncontrada = Cuenta.findById(id)
+
+    res.json({
+        msg: 'Cuenta encontrada',
+        cuentaEncontrada
+    })
+
+}
+
+const getTransacciones = async (req = request, res = response) => {
+
+    const { numCuenta } = req.body
+    const { id } = req.usuario;
+
+    const cuentaTransacciones = await Cuenta.findOne({ numCuenta });
 
     console.log(cuentaTransacciones.usuario.toString());
     console.log(id);
 
-    if(id != cuentaTransacciones.usuario.toString()){
+    if (id != cuentaTransacciones.usuario.toString()) {
         return res.status(404).json({
-            msg:'Esta cuenta no esta en la lista del usuario'
+            msg: 'Esta cuenta no esta en la lista del usuario'
         })
     }
 
-    if(!cuentaTransacciones){
+    if (!cuentaTransacciones) {
         return res.status(404).json({
-            msg:'No existe esta cuenta'
+            msg: 'No existe esta cuenta'
         })
     }
 
     const registros = cuentaTransacciones.registro;
 
     res.json({
-        msg:'Transacciones de la cuenta',
+        msg: 'Transacciones de la cuenta',
         registros
-    }) 
+    })
 }
 
 const postCuenta = async (req = request, res = response) => {
@@ -90,13 +101,13 @@ const postCuenta = async (req = request, res = response) => {
             });
         }
 
-        if(data.capital < 0){
+        if (data.capital < 0) {
             return res.status(404).json({
-                msg:'No se puede crear esta cuenta con capital negativo'
+                msg: 'No se puede crear esta cuenta con capital negativo'
             })
         }
 
-        // Crear la cuenta bancaria
+        // crear la cuenta bancaria
         const nuevaCuenta = new Cuenta({
             usuario: data.usuario,
             numCuenta,
@@ -109,7 +120,6 @@ const postCuenta = async (req = request, res = response) => {
 
         // Agregar el id de la cuenta al nuevo propietario
         propietarioExistente.no_cuenta.push(nuevaCuenta._id);
-        console.log(propietarioExistente.no_cuenta);
         await propietarioExistente.save();
 
         res.json({
@@ -128,9 +138,9 @@ const putCuenta = async (req = request, res = response) => {
     const { id } = req.params;
     const { usuario, ...resto } = req.body;
 
-    if(resto.capital < 0){
+    if (resto.capital < 0) {
         return res.status(404).json({
-            msg:'No se puede actualizar esta cuenta con saldo negativo'
+            msg: 'No se puede actualizar esta cuenta con saldo negativo'
         })
     }
 
@@ -159,7 +169,7 @@ const putCuenta = async (req = request, res = response) => {
 
 
     res.json({
-        msg: 'Modificado con exito',
+        msg: 'Modificado con éxito',
     })
 
 };
@@ -201,21 +211,34 @@ const deleteCuenta = async (req, res) => {
 const transferencias = async (req = request, res = response) => {
     const
         {
-            monto, // Monto es la cantidad de dinero que se le va a tranferir a la otra cuenta
-            numCuenta, // numCuenta es el numero de cuenta a la cual se va a hacer la tranferencia
+            monto, // Monto es la cantidad de dinero que se le va a transferir a la otra cuenta
+            numCuenta, // numCuenta es el numero de cuenta a la cual se va a hacer la transferencia
             seleccionCuenta,
             /*
             seleccionCuenta va a ser el numero de cuenta que va a escoger el 
             usuario que va a hacer la transferencia. si el usuario quiere hacer la transferencia 
             desde la primer cuenta de su lista de cuentas va a colocar el numero de cuenta por asi decirlo, 
-            si quiere la segunda cuenta de su listado de cuentas va a escoger la opcion de su numero de cuenta, etc...
+            si quiere la segunda cuenta de su listado de cuentas va a escoger la opción de su numero de cuenta, etc...
             */
         } = req.body;
-    const fechaActual = new Date(); // Fecha actual en la que fue hecha la tranferencia.
 
-    const cuentaTransferencia = await Cuenta.findOne({numCuenta:seleccionCuenta});
+    const { no_cuenta } = req.usuario;
+
+    const fechaActual = new Date(); // Fecha actual en la que fue hecha la transferencia.
+
+    const cuentaTransferencia = await Cuenta.findOne({ numCuenta: seleccionCuenta });
 
     const registro1 = cuentaTransferencia.registro.length;
+
+    let buscarCuentas = no_cuenta.find(cuenta => {
+        return cuenta.toString() === cuentaTransferencia._id.toString()
+    })
+
+    if (!buscarCuentas) {
+        return res.status(404).json({
+            msg: 'No se puede hacer la transferencia por que la cuenta seleccionada no es tuya'
+        })
+    }
 
     if (cuentaTransferencia.numCuenta == numCuenta) {
         return res.status(404).json({
@@ -225,7 +248,7 @@ const transferencias = async (req = request, res = response) => {
 
     if (monto <= 0) {
         return res.status(404).json({
-            msg: 'No se puede esta transferencia vacia'
+            msg: 'No se puede esta transferencia vacía'
         })
     }
 
@@ -242,16 +265,6 @@ const transferencias = async (req = request, res = response) => {
     }
     cuentaTransferencia.capital = cuentaTransferencia.capital - monto;
 
-    const registroTransferencia = {
-        egreso: monto,
-        fecha: fechaActual,
-        convenio: 'transferencia',
-        descripcion: 'Egreso'
-    }
-
-    cuentaTransferencia.registro[registro1] = registroTransferencia;
-
-    await cuentaTransferencia.save();
 
     const cuentaTransferir = await Cuenta.findOne({ numCuenta });
 
@@ -259,45 +272,108 @@ const transferencias = async (req = request, res = response) => {
 
     cuentaTransferir.capital = cuentaTransferir.capital + monto;
 
-    const registroCuentaTransferir = {
-        egreso: monto,
+    const registroTransferencia = {
+        numeroTransaccion: cuentaTransferencia.registro.length,
+        monto,
         fecha: fechaActual,
         convenio: 'transferencia',
-        descripcion:'Ingreso'
+        descripcion: 'Egreso',
+        numCuenta,
+    }
+
+    cuentaTransferencia.registro[registro1] = registroTransferencia;
+
+    const registroCuentaTransferir = {
+        monto,
+        fecha: fechaActual,
+        convenio: 'transferencia',
+        descripcion: 'Ingreso',
+        numCuenta: seleccionCuenta
     }
 
     cuentaTransferir.registro[registro2] = registroCuentaTransferir;
+    cuentaTransferencia.numeroTransaccion = cuentaTransferencia.registro.length;
+    cuentaTransferir.numeroTransaccion = cuentaTransferir.registro.length;
+
+    await cuentaTransferencia.save();
 
     await cuentaTransferir.save();
 
     res.json({
-        msg: 'Se ha hecho la transferencia con exito!'
+        msg: 'Se ha hecho la transferencia con éxito!'
 
     })
 }
 
 const getCuentasConMasMovimientos = async (req = request, res = response) => {
     const { orden } = req.body;
-    let cuentas;
-    let listaCuentas;
 
     try {
+        // Obtener todas las cuentas con sus registros
+        const cuentasRegistros = await Cuenta.find();
 
-        if (orden === 1) {
-            cuentas = await Cuenta.find();
-            for (const { registro, usuario } of cuentas) {
-                console.log(
-                    registro.sort(function (a, b) {
-                        return a - b;
-                    })
-                );
-            }
+        // Ordenar el array de cuentas en función del número de transacciones
+        if (orden === 'Ascendente') {
+            cuentasRegistros.sort((a, b) => a.numeroTransaccion - b.numeroTransaccion);
+        } else if (orden === 'Descendente') {
+            cuentasRegistros.sort((a, b) => b.numeroTransaccion - a.numeroTransaccion);
+        } else {
+            return res.status(400).json({ msg: 'Orden inválida. Use "Ascendente" o "Descendente".' });
         }
 
+        // Crear una lista con los usuarios y el número de transacciones de cada cuenta
+        const usuariosConTransacciones = cuentasRegistros.map(cuenta => ({
+            usuario: cuenta.usuario,
+            cuenta: cuenta,
+        }));
+
+        // Obtener las cuentas con más transacciones
+        const cuentasConMasTransacciones = usuariosConTransacciones.filter(({ cuenta }) => cuenta.numeroTransaccion >= 0);
+
+        // Obtener los usuarios con más transacciones y sus registros
+        const usuariosConMasTransacciones = await Promise.all(
+            cuentasConMasTransacciones.map(async ({ cuenta }) => {
+                const usuarioData = await Usuario.findById(cuenta.usuario);
+                return {
+                    nombre: usuarioData.user,
+                    numeroTransacciones: cuenta.numeroTransaccion,
+                    registros: cuenta.registro // Aquí asumimos que el modelo Cuenta tiene el campo 'registro'
+                };
+            })
+        );
+
+        res.json({
+            msg: 'Usuarios con más transacciones',
+            usuariosConMasTransacciones
+        });
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        res.status(500).json({
+            msg: 'Error al obtener usuarios con más transacciones'
+        });
     }
-}
+};
+
+// const getCuentasConMasMovimientos = async (req = request, res = response) => {
+//     const { orden } = req.body;
+
+//     const cuentasRegistros = await Cuenta.find();
+
+//     for (let i = 0; i < cuentasRegistros.length; i++) {
+//         console.log(cuentasRegistros[i].numeroTransaccion);
+//     }
+
+//     if (orden === 'Ascendente') {
+
+//     } else if (orden === 'Descendente') {
+
+//     }
+
+//     res.json({
+//         msg: 'Registro de cuentas',
+
+//     })
+// }
 
 module.exports = {
     getCuentas,
@@ -306,5 +382,6 @@ module.exports = {
     deleteCuenta,
     transferencias,
     getCuentasConMasMovimientos,
-    getTransacciones
+    getTransacciones,
+    getCuentaById
 }

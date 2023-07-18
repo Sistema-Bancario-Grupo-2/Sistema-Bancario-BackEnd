@@ -33,7 +33,6 @@ const esRoleValido = async (rol = '') => {
 
 const existeUsuarioPorId = async (id) => {
     const existIdOfUser = await Usuario.findById(id);
-    console.log(existIdOfUser);
     if (!existIdOfUser) {
         throw new Error(`El usuario con el id: ${id} no existe en la DB`);
     }

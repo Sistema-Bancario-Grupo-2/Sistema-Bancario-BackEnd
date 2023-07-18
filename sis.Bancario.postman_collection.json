@@ -18,12 +18,12 @@
 								"header": [
 									{
 										"key": "x-token",
-										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NDlmYWExZTRmZGVhM2FhMmEzN2YxYzkiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTYxMTk1NCwiZXhwIjoxNjg5NjI2MzU0fQ.whnp2zqJZDzP58bR4yl3GZJk3mliaPxl1jnJJCuZT4Q",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NDlmYWExZTRmZGVhM2FhMmEzN2YxYzkiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTYzMjc3MSwiZXhwIjoxNjg5NjQ3MTcxfQ.iY6ezAYK6bugYM1IzYSfKQ4cbpIIc4njtYc-covgmrU",
 										"type": "default"
 									}
 								],
 								"url": {
-									"raw": "127.0.0.1:8080/banco/usuario/add/favoritos/649faa1e4fdea3aa2a37f1c1",
+									"raw": "127.0.0.1:8080/banco/usuario/add/favoritos/649faa1e4fdea3aa2a37f1c9",
 									"host": [
 										"127",
 										"0",
@@ -36,7 +36,7 @@
 										"usuario",
 										"add",
 										"favoritos",
-										"649faa1e4fdea3aa2a37f1c1"
+										"649faa1e4fdea3aa2a37f1c9"
 									],
 									"query": [
 										{
@@ -88,6 +88,70 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Get Favoritos",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NDlmYWExZTRmZGVhM2FhMmEzN2YxYzkiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTYzMjc3MSwiZXhwIjoxNjg5NjQ3MTcxfQ.iY6ezAYK6bugYM1IzYSfKQ4cbpIIc4njtYc-covgmrU",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "127.0.0.1:8080/banco/usuario/favoritos/",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"banco",
+										"usuario",
+										"favoritos",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Login Usuarios",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"correo\": \"shiro@gmail.com\",\r\n    \"password\": \"123456\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/banco/auth/login",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"banco",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -124,29 +188,23 @@
 					"response": []
 				},
 				{
-					"name": "Login Usuarios",
+					"name": "UsuarioById",
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"correo\": \"marvin@gmail.com\",\r\n    \"password\": \"123456\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "localhost:8080/banco/auth/login",
+							"raw": "127.0.0.1:8080/banco/usuario/",
 							"host": [
-								"localhost"
+								"127",
+								"0",
+								"0",
+								"1"
 							],
 							"port": "8080",
 							"path": [
 								"banco",
-								"auth",
-								"login"
+								"usuario",
+								""
 							]
 						}
 					},
@@ -159,13 +217,13 @@
 						"header": [
 							{
 								"key": "x-token",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NDlmYmY2YTZmMzYwZTUwMWFkNWMwZGMiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTUxMzk2NiwiZXhwIjoxNjg5NTI4MzY2fQ.DKjN-_yJoKLDdUixnUdccnFGZTckfSYYucFhp3g5ZS0",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NGI1ZTFmZDAxNmMzNTlkM2IwNjY5NGEiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTY0OTkxMCwiZXhwIjoxNjg5NjY0MzEwfQ.iRipV0VnEjWC1iM2bFiKAKcS6yZ1kTFunMYTYDHq09w",
 								"type": "default"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user\":\"Negro\", //Un nombre o un apodo del usuario\r\n    \"dpi\": \"123456789\", //13 digitos\r\n    \"ingresos_mensuales\": \"1500\", //No menos de 100\r\n    \"correo\":\"men@gmail.com\", //correo del usuario\r\n    \"password\":\"123456\",\r\n    \"direccion\":\"Zona 3 barcenas villa nueva Guatemala\",\r\n    \"celular\":\"12345678\"\r\n    // Por defecto esta el rol Cliente\r\n}",
+							"raw": "{\r\n    \"user\":\"Shiro Salas\", //Un nombre o un apodo del usuario\r\n    \"dpi\": \"1234567895555\", //13 digitos\r\n    \"ingresos_mensuales\": \"8000\", //No menos de 100\r\n    \"correo\":\"shiro@gmail.com\", //correo del usuario\r\n    \"password\":\"123456\",\r\n    \"direccion\":\"Zona 3 barcenas villa nueva Guatemala\",\r\n    \"celular\":\"12345678\"\r\n    // Por defecto esta el rol Cliente\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -195,13 +253,19 @@
 						"header": [
 							{
 								"key": "x-token",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NDlmYmY2YTZmMzYwZTUwMWFkNWMwZGMiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTU1MTk1MSwiZXhwIjoxNjg5NTY2MzUxfQ.3PGoJbjVWhfHQAb_y_9v3mNVy96vxi-ftHZXZ2TsfDc",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NGI1ZTFmZDAxNmMzNTlkM2IwNjY5NGEiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTY0OTkxMCwiZXhwIjoxNjg5NjY0MzEwfQ.iRipV0VnEjWC1iM2bFiKAKcS6yZ1kTFunMYTYDHq09w",
 								"type": "default"
+							},
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NGI1ZTYzZjczNjVjOTNmNjJhZGVjMjYiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTY0MjYwNywiZXhwIjoxNjg5NjU3MDA3fQ.irdyZUZ4tizHy1nz2aE7mHWeHMIlMTXbYfSPyXtixRw",
+								"type": "default",
+								"disabled": true
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user\":\"Negro\", //Un nombre o un apodo del usuario\r\n    \"dpi\": \"123456789\", //13 digitos\r\n    \"ingresos_mensuales\": \"1500\", //No menos de 100\r\n    \"correo\":\"men@gmail.com\", //correo del usuario\r\n    \"password\":\"123456\",\r\n    \"direccion\":\"Zona 3 barcenas villa nueva Guatemala\",\r\n    \"celular\":\"12345678\"\r\n    // Solo un administrador podra actualizar todos los campos de si mismo y de un cliente, menos los de otro administrador\r\n}",
+							"raw": "{\r\n    \"user\":\"MarvinLuna\", //Un nombre o un apodo del usuario\r\n    \"dpi\": \"1234567891222\", //13 digitos\r\n    \"ingresos_mensuales\": \"8000\", //No menos de 100\r\n    \"correo\":\"MarvinLuna@gmail.com\", //correo del usuario\r\n    \"password\":\"123456\",\r\n    \"direccion\":\"Zona 3 barcenas villa nueva Guatemala\",\r\n    \"celular\":\"12345678\"\r\n    // Solo un administrador podra actualizar todos los campos de si mismo y de un cliente, menos los de otro administrador\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -209,7 +273,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/banco/usuario/editar/649fbf6a6f360e501ad5c0dc",
+							"raw": "localhost:8080/banco/usuario/editar/64b5e63f7365c93f62adec26",
 							"host": [
 								"localhost"
 							],
@@ -218,7 +282,7 @@
 								"banco",
 								"usuario",
 								"editar",
-								"649fbf6a6f360e501ad5c0dc"
+								"64b5e63f7365c93f62adec26"
 							]
 						}
 					},
@@ -250,29 +314,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "UsuarioById",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "127.0.0.1:8080/banco/usuario/649faa1e4fdea3aa2a37f1c1",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8080",
-							"path": [
-								"banco",
-								"usuario",
-								"649faa1e4fdea3aa2a37f1c1"
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
@@ -289,14 +330,19 @@
 								"header": [
 									{
 										"key": "x-token",
-										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NDdiYjg5NzM2NTIzYTQ4OWU3NTliYjAiLCJpYXQiOjE2ODU4MzA4NTUsImV4cCI6MTY4NTg0ODg1NX0.3ABXMDdIsdVNx7zyFv3NRoSOxg1cUz93m0D9c3Jx7g4",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NGI1ZTYzZjczNjVjOTNmNjJhZGVjMjYiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTY0MjYwNywiZXhwIjoxNjg5NjU3MDA3fQ.irdyZUZ4tizHy1nz2aE7mHWeHMIlMTXbYfSPyXtixRw",
 										"type": "text",
 										"disabled": true
+									},
+									{
+										"key": "x-token",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NGI2MWJlMTczZTc4YjAxZTE4MTJmZjUiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTY1NjM0OCwiZXhwIjoxNjg5NjcwNzQ4fQ.1IxYNABM2IvYr1X-5tOZok8JUJmpiMlpBiSYvyae2oM",
+										"type": "default"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"numCuenta\": \"8fccd324-b9e0-4385-8066-bfc39dcad8e7\", //El numero de cuenta a la que va a ir la transferencia\r\n    \"monto\": 100, // Cuanto es que se va a tranferir\r\n    \"seleccionCuenta\":\"\" //Cuenta del usuario que va a hacer transferencia\r\n}",
+									"raw": "{\r\n    \"numCuenta\": \"edc99ae0-ec43-4e06-861d-e02cf74b592d\", //El numero de cuenta a la que va a ir la transferencia\r\n    \"monto\": 10, // Cuanto es que se va a tranferir\r\n    \"seleccionCuenta\": \"d2eef7e0-334e-4501-bb5e-8206e5832240\" //Cuenta del usuario que va a hacer transferencia\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -329,19 +375,19 @@
 								"header": [
 									{
 										"key": "x-token",
-										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NGI0YzM3ZTU2NjIxMDk5MGFkZDJiZWEiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTYxMDIzMywiZXhwIjoxNjg5NjI0NjMzfQ.Gc73LQ9wB_4D7S6BYrQHnJhlPVEkchM6eXZ8bDYOwTI",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NGI1ZTFmZDAxNmMzNTlkM2IwNjY5NGEiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTY0OTkxMCwiZXhwIjoxNjg5NjY0MzEwfQ.iRipV0VnEjWC1iM2bFiKAKcS6yZ1kTFunMYTYDHq09w",
 										"type": "default",
 										"disabled": true
 									},
 									{
 										"key": "x-token",
-										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NDlmYmY2YTZmMzYwZTUwMWFkNWMwZGMiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTYxMDgwMiwiZXhwIjoxNjg5NjI1MjAyfQ.asPGUZ1jwVRbMAc1W3MAeO93hIZcjk7ju7Vij35XUcg",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NGI1ZTYzZjczNjVjOTNmNjJhZGVjMjYiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTY0MjYwNywiZXhwIjoxNjg5NjU3MDA3fQ.irdyZUZ4tizHy1nz2aE7mHWeHMIlMTXbYfSPyXtixRw",
 										"type": "default"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"numCuenta\":\"156bd040-1cb8-410c-98e4-be3f489a6d58\"\r\n}",
+									"raw": "{\r\n    \"numCuenta\":\"edc99ae0-ec43-4e06-861d-e02cf74b592d\"\r\n}\r\n\r\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -366,19 +412,77 @@
 					]
 				},
 				{
+					"name": "mostrar registros (asc y desc)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NGI1ZTFmZDAxNmMzNTlkM2IwNjY5NGEiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTY0OTkxMCwiZXhwIjoxNjg5NjY0MzEwfQ.iRipV0VnEjWC1iM2bFiKAKcS6yZ1kTFunMYTYDHq09w",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"orden\":\"Descendente\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/banco/cuenta/registros",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"banco",
+								"cuenta",
+								"registros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mostrar cuentas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/banco/cuenta/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"banco",
+								"cuenta",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Crear cuenta",
 					"request": {
 						"method": "POST",
 						"header": [
 							{
 								"key": "x-token",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NDg1ZTRiYWY5Y2QyNDJmYjk0ZTE2ZTEiLCJpYXQiOjE2ODcyNzcyNDIsImV4cCI6MTY4NzI5NTI0Mn0.8C3_gTqAGgWDxx17VB2nl51-WHd_xlZ4oFYF5lwYQiI",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb3JyZW8iOiI2NGI1ZTFmZDAxNmMzNTlkM2IwNjY5NGEiLCJwYXNzd29yZCI6IiIsImlhdCI6MTY4OTY0OTkxMCwiZXhwIjoxNjg5NjY0MzEwfQ.iRipV0VnEjWC1iM2bFiKAKcS6yZ1kTFunMYTYDHq09w",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"usuario\":\"6485e7d24fb3124dc8494d9a\", //Usuario al que va a estar vinculado\r\n    \"tipo_cuenta\":\"monetaria\", //Solo existen 4 tipos de cuenta monetaria, ahorro, tarjeta de credito y Prestamos\r\n    \"capital\": -1\r\n}",
+							"raw": "{\r\n    \"usuario\":\"64b61be173e78b01e1812ff5\", //Usuario al que va a estar vinculado\r\n    \"tipo_cuenta\":\"Ahorro\", //Solo existen 4 tipos de cuenta monetaria, ahorro, tarjeta de credito y Prestamos\r\n    \"capital\": 10000\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -466,26 +570,6 @@
 									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NDg1ZTRiYWY5Y2QyNDJmYjk0ZTE2ZTEiLCJpYXQiOjE2ODcyNzcyNDIsImV4cCI6MTY4NzI5NTI0Mn0.8C3_gTqAGgWDxx17VB2nl51-WHd_xlZ4oFYF5lwYQiI",
 									"disabled": true
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Mostrar cuentas",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/banco/cuenta/",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"banco",
-								"cuenta",
-								""
 							]
 						}
 					},

@@ -19,8 +19,12 @@ const CuentaSchema = Schema({
         type: Number,
         required: true,
     },
+    numeroTransaccion:{
+        type: Number,
+        default: 0
+    },
     registro: [{
-        egreso: {
+        monto: {
             type: Number,
         },
         convenio: {
@@ -31,6 +35,9 @@ const CuentaSchema = Schema({
         }, 
         descripcion:{
             type: String,
+        },
+        numCuenta:{
+            type: String
         }
     }]
 

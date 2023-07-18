@@ -3,6 +3,7 @@ const cors = require('cors')
 const { dbConnection } = require('../database/config')
 const { defaultAdmin } = require('../controllers/usuario');
 const { defaultTipoCuentas } = require('../controllers/tipoCuenta');
+const { defaultRoles } = require('../controllers/role');
 
 class Server {
     constructor() {
@@ -26,6 +27,8 @@ class Server {
         defaultTipoCuentas();
         
         defaultAdmin();
+
+        defaultRoles();
     }
 
     middlewares() {

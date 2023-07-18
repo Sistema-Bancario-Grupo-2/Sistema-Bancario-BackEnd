@@ -2,7 +2,7 @@ const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 
 const Usuario = require('../models/usuario');
-const Cuenta = require('../models/cuenta')
+const Cuenta = require('../models/cuenta');
 
 const defaultAdmin = async () => {
     try {
@@ -27,7 +27,6 @@ const defaultAdmin = async () => {
 }
 
 const getUsuarios = async (req = request, res = response) => {
-    const query = {};
 
     const listaUsuarios = await Usuario.find(
 
@@ -44,16 +43,15 @@ const getUsuarios = async (req = request, res = response) => {
     });
 }
 
-const getUsuarioById = async(req = request, res = response) => {
-    const {id} = req.params;
+const getUsuarioById = async (req = request, res = response) => {
+    const { id } = req.params;
 
     const usuarioById = await Usuario.findById(id)
 
     res.json({
-        msg:'Usuario by Id',
+        msg: 'Usuario by Id',
         usuarioById
     })
-
 }
 
 const postUsuario = async (req = request, res = response) => {
@@ -80,41 +78,44 @@ const postUsuario = async (req = request, res = response) => {
 
 const putUsuario = async (req = request, res = response) => {
     const { id } = req.params;
-    const user = req.usuario;
+    const usuario = req.usuario;
 
+    if (usuario.rol === 'CLIENTE_ROLE') {
 
-    const usuarioExistente = await Usuario.findById(id);
-    if (!usuarioExistente) {
-        return res.status(404).json({
-            message: 'Usuario no encontrado'
-        });
-    }
+        if (usuario._id != id) {
+            return res.status(404).json({
+                msg: 'No se puede editar a otro usuario'
+            })
+        }
+        const { _id, dpi, user, rol, direccion, ingresos_mensuales, favoritos, no_cuenta, ...resto } = req.body;
 
-    if (user._id != id) {
-        return res.status(404).json({
-            msg: 'No se puede editar a otro usuario'
-        })
-    }
-    if (user.rol === 'CLIENTE_ROLE') {
-        const { _id, dpi, rol, direccion, celular, ingresos_mensuales, favoritos, no_cuenta, ...resto } = req.body;
+        const salt = bcryptjs.genSaltSync();
+        resto.password = bcryptjs.hashSync(resto.password, salt);
 
-        // Actualizar y guardar el usuario
         const usuarioEditado = await Usuario.findByIdAndUpdate(
             id,
             resto,
         );
 
-        res.json({
+        return res.json({
             msg: 'PUT API de usuario',
             usuarioEditado
         });
-    } else if (user.rol === 'ADMIN_ROLE') {
-        const data = req.body;
+    } else if (usuario.rol === 'ADMIN_ROLE') {
+
+        const usuarioExistente = await Usuario.findById(id);
+        if (usuario.id != id && usuarioExistente.rol === 'ADMIN_ROLE') {
+            return res.status(404).json({
+                message: 'No se puede editar a otro admin'
+            });
+        }
+
+        const { _id, ...resto } = req.body;
+
 
         const favoritosActualizados = [...usuarioExistente.favoritos];
-
-        if (favoritos && favoritos.length > 0) {
-            favoritos.forEach((nuevoFavorito) => {
+        if (resto.favoritos && favoritos.length > 0) {
+            resto.favoritos.forEach((nuevoFavorito) => {
                 const existenteIndex = favoritosActualizados.findIndex((favorito) => favorito.no_cuenta.toString() === nuevoFavorito.no_cuenta.toString());
                 if (existenteIndex !== -1) {
                     favoritosActualizados[existenteIndex].preferencia = nuevoFavorito.preferencia;
@@ -124,16 +125,21 @@ const putUsuario = async (req = request, res = response) => {
             });
         }
 
+
         const usuarioEditado = await Usuario.findByIdAndUpdate(
             id,
-            { $set: data, favoritos: favoritosActualizados },
+            { $set: resto, favoritos: favoritosActualizados },
             { new: true }
         );
 
-        res.json({
+        return res.json({
             msg: 'PUT API de usuario',
             usuarioEditado
         });
+    }else {
+        res.status(404).json({
+            msg:'Hubo un problema al editar el usuario, comuníquese con el administrador'
+        })
     }
 }
 
@@ -159,15 +165,51 @@ const deleteUsuario = async (req = request, res = response) => {
 
 }
 
+const getFavoritos = async (req = request, res = response) => {
+    const { favoritos } = req.usuario;
+    let usuariosFav = []
+    let cuentasFav = []
+
+    if (favoritos.length === 0) {
+        return res.json({
+            msg: 'No hay usuarios por mostrar'
+        })
+    }
+
+    for (let i = 0; i < favoritos.length; i++) {
+        let { _id, no_cuenta, user } = await Usuario.findById(favoritos[i].usuarioId)
+        usuariosFav.push({ _id, idCuenta: no_cuenta })
+        for (let index = 0; index < usuariosFav[i].idCuenta.length; index++) {
+            if (usuariosFav[i].idCuenta[index].length !== 0) {
+                let cuentas = await Cuenta.findById(usuariosFav[i].idCuenta[index])
+                cuentasFav.push({ idUsuario: _id, usuarioNombre: user, numeroCuenta: cuentas.numCuenta, tipoCuenta: cuentas.tipo_cuenta });
+            }
+
+        }
+    }
+
+    res.json({
+        msg: 'Favoritos',
+        cuentasFav
+    })
+
+}
+
 const addFavoritos = async (req = request, res = response) => {
     const usuarioId = req.params;
     const { id } = req.usuario;
 
-    console.log(id);
-
     try {
 
         const usuarioFavoritos = await Usuario.findById(id);
+
+        const addUsuarioFav = await Usuario.findById(usuarioId.id);
+
+        if (addUsuarioFav.rol === 'ADMIN_ROLE') {
+            return res.status(404).json({
+                msg: 'No se puede agregar un admin como favoritos'
+            })
+        }
 
         for (const userId of usuarioFavoritos.favoritos) {
             console.log(userId);
@@ -236,6 +278,7 @@ module.exports = {
     putUsuario,
     deleteUsuario,
     addFavoritos,
-    eliminarFavorito, 
+    eliminarFavorito,
     getUsuarioById,
+    getFavoritos
 }
