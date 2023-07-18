@@ -112,6 +112,8 @@ const putUsuario = async (req = request, res = response) => {
 
         const { _id, ...resto } = req.body;
 
+        const salt = bcryptjs.genSaltSync();
+        resto.password = bcryptjs.hashSync(resto.password, salt);
 
         const favoritosActualizados = [...usuarioExistente.favoritos];
         if (resto.favoritos && favoritos.length > 0) {
