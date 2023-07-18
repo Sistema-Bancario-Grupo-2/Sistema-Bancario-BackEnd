@@ -43,6 +43,18 @@ const getUsuarios = async (req = request, res = response) => {
     });
 }
 
+const getMyInfo = async (req = request, res = response) => {
+    const usuarioId = req.usuario.id;
+    console.log(usuarioId);
+
+    const usuarioById = await Usuario.findById(usuarioId)
+
+    res.json({
+        msg: 'Mi informacion Id',
+        usuarioById
+    })
+}
+
 const getUsuarioById = async (req = request, res = response) => {
     const { id } = req.params;
 
@@ -282,5 +294,6 @@ module.exports = {
     addFavoritos,
     eliminarFavorito,
     getUsuarioById,
-    getFavoritos
+    getFavoritos,
+    getMyInfo
 }

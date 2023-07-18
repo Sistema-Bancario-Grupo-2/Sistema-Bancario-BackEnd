@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const router = Router()
-const { getUsuarios, postUsuario, putUsuario, deleteUsuario, addFavoritos, eliminarFavorito, getUsuarioById, getFavoritos } = require('../controllers/usuario');
+const { getUsuarios, postUsuario, putUsuario, deleteUsuario, addFavoritos, eliminarFavorito, getUsuarioById, getFavoritos, getMyInfo } = require('../controllers/usuario');
 const { check } = require('express-validator');
 const { dpiValido, ifExistCorreo, ingresoValido, existeUser, buscarCuentaFavoritos, existeUsuarioPorId, existDPI, ascenDescenNumber } = require('../helpers/db-validators');
 const { validarCampos } = require('../middlewares/validar-campos');
@@ -16,6 +16,10 @@ router.get('/favoritos/',
     ],
     getFavoritos
 );
+
+router.get('/buscarId', [
+    validarJWT
+], getMyInfo);
 
 router.get('/:id', [
 
