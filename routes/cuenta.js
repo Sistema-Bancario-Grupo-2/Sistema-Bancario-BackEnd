@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const router = Router();
-const { postCuenta, getCuentas, putCuenta, deleteCuenta, transferencias, getCuentasConMasMovimientos, getTransacciones, getCuentaById, } = require('../controllers/cuenta');
+const { postCuenta, getCuentas, putCuenta, deleteCuenta, transferencias, getCuentasConMasMovimientos, getTransacciones, getCuentaById, getCuentaByUsuario, } = require('../controllers/cuenta');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
@@ -20,6 +20,10 @@ router.get('/registros/',
     ],
     getCuentasConMasMovimientos
 );
+
+router.get('/misCuentas', [
+    validarJWT
+], getCuentaByUsuario);
 
 router.get('/transacciones/',
     [

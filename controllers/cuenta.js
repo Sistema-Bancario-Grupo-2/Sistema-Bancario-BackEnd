@@ -33,6 +33,26 @@ const getCuentas = async (req = request, res = response) => {
     }
 };
 
+const getCuentaByUsuario = async (req = request, res = response) => {
+    const { no_cuenta } = req.usuario;
+
+    let listaCuentas = await Cuenta.find()
+
+    listaCuentas = listaCuentas.filter(cuenta => no_cuenta.includes(cuenta._id.toString()));
+    if (listaCuentas.length == 0) {
+        return res.json({
+            msg: 'No hay ninguna cuenta'
+        })
+    }
+
+    console.log(listaCuentas);
+
+    res.json({
+        msg: 'Listado de cuentas',
+        listaCuentas
+    })
+}
+
 const getCuentaById = async (req = req, res = response) => {
     const { id } = req.params;
 
@@ -383,5 +403,6 @@ module.exports = {
     transferencias,
     getCuentasConMasMovimientos,
     getTransacciones,
-    getCuentaById
+    getCuentaById,
+    getCuentaByUsuario
 }
